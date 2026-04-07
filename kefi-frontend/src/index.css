@@ -1,0 +1,46 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+:root { --bg-base: #0a0a0f; --bg-panel: #14141d; --bg-elevated: #1e1e2d; --accent-primary: #9d4edd; --accent-glow: rgba(157, 78, 221, 0.4); --spotify-green: #1DB954; --text-main: #ffffff; --text-muted: #a0a0b0; --player-height: 90px; }
+body { background-color: var(--bg-base); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.app-container { display: flex; flex: 1; height: calc(100vh - var(--player-height)); }
+.sidebar { width: 280px; background-color: var(--bg-panel); padding: 20px; display: flex; flex-direction: column; gap: 25px; border-right: 1px solid rgba(255,255,255,0.05); }
+.room-info h2 { font-size: 1.2rem; color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow); margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+.spotify-connect { background-color: transparent; border: 1px solid var(--spotify-green); color: var(--spotify-green); padding: 10px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; }
+.spotify-connect:hover { background-color: var(--spotify-green); color: #000; }
+.members-section h3 { font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 1px; }
+.member-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.member { display: flex; align-items: center; justify-content: space-between; padding: 8px; background: var(--bg-elevated); border-radius: 8px; }
+.member-info { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 32px; height: 32px; background: linear-gradient(45deg, var(--accent-primary), #ff007f); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
+.role-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 12px; background: rgba(255,255,255,0.1); }
+.role-host { background: rgba(157, 78, 221, 0.2); color: #e0aaff; } .role-dj { background: rgba(0, 180, 216, 0.2); color: #90e0ef; }
+.main-content { flex: 1; padding: 30px; background: radial-gradient(circle at top, #1a1a2e 0%, var(--bg-base) 100%); overflow-y: auto; }
+.search-bar { position: relative; max-width: 600px; margin: 0 auto 40px auto; }
+.search-bar input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 30px; border: none; background: var(--bg-elevated); color: white; font-size: 1rem; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: box-shadow 0.3s ease; }
+.search-bar input:focus { box-shadow: 0 0 15px var(--accent-glow); border: 1px solid var(--accent-primary); }
+.search-bar i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.section-title { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; }
+.song-list { display: flex; flex-direction: column; gap: 10px; }
+.song-item { display: flex; align-items: center; padding: 12px 15px; background: rgba(255,255,255,0.02); border-radius: 8px; transition: background 0.2s; }
+.song-item:hover { background: rgba(255,255,255,0.08); }
+.song-art { width: 45px; height: 45px; border-radius: 4px; background: #333; margin-right: 15px; object-fit: cover; }
+.song-details { flex: 1; }
+.song-title { font-weight: 500; margin-bottom: 4px; } .song-artist { font-size: 0.85rem; color: var(--text-muted); }
+.add-to-queue-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 6px 12px; border-radius: 15px; cursor: pointer; transition: all 0.2s; }
+.add-to-queue-btn:hover { border-color: var(--text-main); color: var(--text-main); background: rgba(255,255,255,0.1); }
+.queue-panel { width: 320px; background-color: var(--bg-panel); padding: 20px; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
+.queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.host-controls { display: flex; gap: 10px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.ctrl-btn { background: var(--bg-elevated); border: none; color: var(--text-main); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; flex: 1; }
+.ctrl-btn:hover { background: rgba(255,255,255,0.2); }
+.player { height: var(--player-height); background-color: #181818; border-top: 1px solid #282828; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; z-index: 10; }
+.now-playing { display: flex; align-items: center; width: 30%; }
+.player-controls { display: flex; flex-direction: column; align-items: center; width: 40%; gap: 8px; }
+.control-buttons { display: flex; align-items: center; gap: 20px; }
+.control-buttons i { color: var(--text-muted); font-size: 1.2rem; cursor: pointer; } .control-buttons i:hover { color: var(--text-main); }
+.play-btn { width: 40px; height: 40px; background: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000 !important; transition: transform 0.2s; }
+.play-btn:hover { transform: scale(1.05); }
+.progress-container { width: 100%; display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-muted); }
+.progress-bar { flex: 1; height: 4px; background: #404040; border-radius: 2px; cursor: pointer; position: relative; }
+.progress-fill { height: 100%; background: var(--accent-primary); width: 45%; border-radius: 2px; position: relative; box-shadow: 0 0 8px var(--accent-glow); }
+.volume-controls { width: 30%; display: flex; justify-content: flex-end; align-items: center; gap: 10px; color: var(--text-muted); }
+.volume-bar { width: 100px; height: 4px; background: #404040; border-radius: 2px; } .volume-fill { height: 100%; width: 70%; background: var(--text-muted); border-radius: 2px; }
