@@ -21,7 +21,7 @@ public class SpotifyService {
         this.spotifyApi = spotifyApi;
     }
 
-    // Automatically get an access token when the server starts
+    // Automatically get a server token when the app starts
     @PostConstruct
     public void init() {
         authenticate();
@@ -32,16 +32,17 @@ public class SpotifyService {
             ClientCredentialsRequest request = spotifyApi.clientCredentials().build();
             ClientCredentials credentials = request.execute();
             spotifyApi.setAccessToken(credentials.getAccessToken());
-            System.out.println("Successfully authenticated with Spotify!");
+            System.out.println("Successfully authenticated with Spotify (Server App)!");
         } catch (Exception e) {
             System.err.println("Failed to authenticate with Spotify: " + e.getMessage());
         }
     }
 
+    // Existing Search Method
     public List<Track> searchTracks(String query) {
         try {
             SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(query)
-                    .limit(10) // Let's return top 10 results
+                    .limit(10)
                     .build();
 
             Paging<se.michaelthelin.spotify.model_objects.specification.Track> trackPaging = searchTracksRequest.execute();
@@ -51,18 +52,42 @@ public class SpotifyService {
                 Track track = Track.builder()
                         .spotifyTrackId(spotifyTrack.getId())
                         .title(spotifyTrack.getName())
-                        .artist(spotifyTrack.getArtists()[0].getName()) // Getting the primary artist
+                        .artist(spotifyTrack.getArtists()[0].getName())
                         .durationMs(spotifyTrack.getDurationMs())
-                        .albumArtUrl(spotifyTrack.getAlbum().getImages()[0].getUrl())
+                        // Prevent crash if a song has no album art
+                        .albumArtUrl(spotifyTrack.getAlbum().getImages().length > 0 ? spotifyTrack.getAlbum().getImages()[0].getUrl() : "")
                         .build();
                 kefiTracks.add(track);
             }
             return kefiTracks;
 
         } catch (Exception e) {
-            // If token expired, re-authenticate and try again (basic retry logic)
             authenticate();
             throw new RuntimeException("Error searching tracks, trying to re-authenticate. Try your search again.", e);
+        }
+    }
+
+    // --- NEW METHODS FOR USER LOGIN ---
+
+    public String getAuthorizationUrl() {
+        return spotifyApi.authorizationCodeUri()
+                .scope("streaming,user-read-email,user-read-private,user-modify-playback-state,user-read-playback-state")
+                .show_dialog(true)
+                .build()
+                .execute()
+                .toString();
+    }
+
+    public String exchangeCodeForToken(String code) {
+        try {
+            var credentials = spotifyApi.authorizationCode(code).build().execute();
+            spotifyApi.setAccessToken(credentials.getAccessToken());
+            spotifyApi.setRefreshToken(credentials.getRefreshToken());
+            System.out.println("✅ User Logged In! Access Token Acquired.");
+
+            return credentials.getAccessToken();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to exchange Spotify code for token", e);
         }
     }
 }
